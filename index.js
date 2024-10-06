@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 
-const { connectToMainDatabase, closeMainConnection } = require("./src/config/database");
+const { connectToDatabase, closeConnection } = require("./src/config/database");
 const routes = require("./src/routes/app.routes");
 const logger = require("./src/utils/logger");
 const cors = require("cors");
@@ -34,10 +34,10 @@ app.use((req, res, next) => {
 const PORT = process.env.PORT || 4000;
 async function startServer() {
   try {
-    await connectToMainDatabase();
+    await connectToDatabase();
 
     app.listen(PORT, () => {
-      logger.info(`Servidor corriendo en el puerto ${PORT}`);
+      logger.info(`Server listening on port ${PORT}`);
     });
   } catch (error) {
     logger.error("Error al iniciar el servidor:", error);
@@ -49,13 +49,13 @@ startServer();
 
 process.on("SIGTERM", async () => {
   logger.info("SIGTERM recibido. Cerrando servidor HTTP");
-  await closeMainConnection();
+  await closeConnection();
   process.exit(0);
 });
 
 process.on("SIGINT", async () => {
   logger.info("SIGINT recibido. Cerrando servidor HTTP");
-  await closeMainConnection();
+  await closeConnection();
   process.exit(0);
 });
 

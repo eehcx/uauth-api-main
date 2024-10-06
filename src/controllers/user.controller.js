@@ -11,6 +11,18 @@ const createUser = async (req, res) => {
     }
 };
 
+const getUserProjects = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const query = await UserService.getUserProjects(id);
+        return res.status(200).json(query);
+    } catch (error) {
+        return res.status(500).json({ error: 'Error fetching projects', details: error.message });
+    }
+}
+
+
 module.exports = { 
-    createUser 
+    createUser,
+    getUserProjects
 };
