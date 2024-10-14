@@ -1,5 +1,5 @@
-const http = require('http');
 const Project = require('../models/project.model');
+const Schema = require('../models/schema.model');
 const UserService = require('./user.service');
 const createDatabase = require('../services/database.service');
 
@@ -33,7 +33,21 @@ const getProjectByToken = async (projectToken) => {
     return await Project.findOne({ projectToken }); 
 };
 
+const upsertProjectSchema = async (projectId, schema) => {
+    try {
+        const result = await Schema.updateOne(
+            { projectId },
+            { $set: { schema, updatedAt: new Date() } },
+            { upsert: true }
+        );
+        return result;
+    } catch (error) {
+        throw new Error(`Error upserting schema: ${error.message}`);
+    }
+}
+
 module.exports = {
     createProject,
     getProjectByToken,
+    upsertProjectSchema,
 };

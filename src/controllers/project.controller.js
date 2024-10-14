@@ -26,7 +26,24 @@ const getProjectByToken = async (req, res) => {
     }
 }
 
+const upsertProjectSchema = async (req, res) => {
+    const { projectId } = req.params;
+    const { schema } = req.body;
+    try {
+        if (!schema || typeof schema !== 'object') {
+            return res.status(400).json({ error: 'Invalid schema format' });
+        }
+
+        const result = await ProjectService.upsertProjectSchema(projectId, schema)
+
+        return res.status(200).json({ message: 'Schema saved successfully', result });
+    } catch (error) {
+        return res.status(500).json({ error: 'Error saving schema', details: error.message });
+    }
+}
+
 module.exports = { 
     createProject,
     getProjectByToken,
+    upsertProjectSchema,
 };

@@ -23,7 +23,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Rutas
-app.use("/api", routes);
+app.use("/resources/v1", routes);
 
 // Manejo de rutas no encontradas
 app.use((req, res, next) => {
@@ -32,6 +32,7 @@ app.use((req, res, next) => {
 });
 
 const PORT = process.env.PORT || 4000;
+
 async function startServer() {
   try {
     await connectToDatabase();
